@@ -38,8 +38,11 @@ paramsFT = [];  % additional optimization parameters for the fit-tasks algorithm
 
 load('brainGEM.mat');
 model = brainGEM;
-model = ravenCobraWrapper(model);
+model = addBoundaryMets(model);
 exchModel = setHamsMedium(model); % adapt the function
+model = ravenCobraWrapper(model);
+% model = addBoundaryMets(model);
+% exchModel = setHamsMedium(model); % adapt the function
 cd ..
 cd GECKO
 cd geckomat
@@ -54,23 +57,22 @@ brain_ecModel = getSubset_ecModel(model,refModel);
 % load('ecHumanGEM.mat');
 % refModelEC = ecModel;
 % ecBrainGEM = getINITModel2(refModelEC, tissue, celltype, hpaData, arrayData, metabolomicsData, removeGenes, taskFile, useScoresForTasks, printReport, taskStructure, params, paramsFT);
-clc
 cd ..
 cd ..
 cd ..
 cd brainGEM
-initCobraToolbox;
-model = changeObjective(model,'biomass_human');
-cobra_fba = optimizeCbModel(model,'max','one', (1)); % run FBA
-FBAvectors_brain_wloop = cobra_fba.x;
-save('FBAvectors_brain_wloop');
-cobra_fba = optimizeCbModel(model,'max','one', 0); % run FBA
-FBAvectors_brain_woloop = cobra_fba.x;
-save('FBAvectors_brain_woloop');
-cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', (1)); % run FBA
-FBAvectors_brain_ec_wloop = cobra_fba_ec.x;
-save('FBAvectors_brain_ec_wloop');
-cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', 0); % run FBA
-FBAvectors_brain_ec_woloop = cobra_fba_ec.x;
-save('FBAvectors_brain_ec_woloop');
+% initCobraToolbox;
+% model = changeObjective(model,'biomass_human');
+% cobra_fba = optimizeCbModel(model,'max','one', (1)); % run FBA
+% FBAvectors_brain_wloop = cobra_fba.x;
+% save('FBAvectors_brain_wloop');
+% cobra_fba = optimizeCbModel(model,'max','one', 0); % run FBA
+% FBAvectors_brain_woloop = cobra_fba.x;
+% save('FBAvectors_brain_woloop');
+% cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', (1)); % run FBA
+% FBAvectors_brain_ec_wloop = cobra_fba_ec.x;
+% save('FBAvectors_brain_ec_wloop');
+% cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', 0); % run FBA
+% FBAvectors_brain_ec_woloop = cobra_fba_ec.x;
+% save('FBAvectors_brain_ec_woloop');
 
