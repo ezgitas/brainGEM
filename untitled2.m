@@ -1,4 +1,5 @@
 clc
+initCobraToolbox;
 gtex_data = readtable('/ezgi/Documents/github/Human1_Publication_Data_scripts/tINIT_GEMs/data/gtex_median_tissue_tpm.txt');
 gtex_data(1:5,1:5);
 % extract the tissue and gene names
@@ -38,23 +39,38 @@ paramsFT = [];  % additional optimization parameters for the fit-tasks algorithm
 load('brainGEM.mat');
 model = brainGEM;
 model = ravenCobraWrapper(model);
-% model = setHamsMedium(model,false); % adapt the function
+exchModel = setHamsMedium(model); % adapt the function
 cd ..
 cd GECKO
 cd geckomat
 cd utilities
 brain_ecModel = getSubset_ecModel(model,refModel);
+% cd ..
+% cd ..
+% cd ecModels
+% cd ecHumanGEM
+% cd model
+% load('ecHumanGEM_batch.mat');
+% load('ecHumanGEM.mat');
+% refModelEC = ecModel;
+% ecBrainGEM = getINITModel2(refModelEC, tissue, celltype, hpaData, arrayData, metabolomicsData, removeGenes, taskFile, useScoresForTasks, printReport, taskStructure, params, paramsFT);
+clc
 cd ..
-cd ecModels
-cd ecHumanGEM
-cd model
-load('ecHumanGEM_batch.mat');
-load('ecHumanGEM.mat');
-refModelEC = ecHumanGEM
-ecBrainGEM = getINITModel2(refModelEC, tissue, celltype, hpaData, arrayData, metabolomicsData, removeGenes, taskFile, useScoresForTasks, printReport, taskStructure, params, paramsFT);
+cd ..
+cd ..
+cd brainGEM
 initCobraToolbox;
 model = changeObjective(model,'biomass_human');
 cobra_fba = optimizeCbModel(model,'max','one', (1)); % run FBA
-FBAvectors_brain = cobra_fba.x;
+FBAvectors_brain_wloop = cobra_fba.x;
+save('FBAvectors_brain_wloop');
+cobra_fba = optimizeCbModel(model,'max','one', 0); % run FBA
+FBAvectors_brain_woloop = cobra_fba.x;
+save('FBAvectors_brain_woloop');
 cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', (1)); % run FBA
-FBAvectors_brain_ec = cobra_fba_ec.x;
+FBAvectors_brain_ec_wloop = cobra_fba_ec.x;
+save('FBAvectors_brain_ec_wloop');
+cobra_fba_ec = optimizeCbModel(brain_ecModel,'max','one', 0); % run FBA
+FBAvectors_brain_ec_woloop = cobra_fba_ec.x;
+save('FBAvectors_brain_ec_woloop');
+
